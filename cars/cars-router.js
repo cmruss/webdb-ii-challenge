@@ -57,5 +57,34 @@ router.get('/:id', validate.id, (req, res) =>{
 
 });
 
+router.put('/:id', validate.id, validate.content, (req, res) => {
+
+    knex('cars')
+        .where({ id: req.params.id })
+        .update(req.body)
+        .then(count => {
+            if (count > 0)
+            res.status(200).json({ message: `${count} record updated.` })
+        })
+        .catch(error => {
+            console.log(error)
+            res.status(500).json({ errorMessage: 'Error modifying car information.' })
+        });
+});
+
+router.delete('/:id', validate.id, (req, res) => {
+
+    knex('cars')
+        .where({ id: req.params.id })
+        .delete()
+        .then(count => {
+            if (count > 0)
+            res.status(200).json({ message: `${count} record deleted.`})
+        })
+        .catch(error => {
+            console.log(error)
+            res.status(500).json({ errorMessage: 'Unable to remove account.'})
+        });
+});
 
 module.exports = router;
